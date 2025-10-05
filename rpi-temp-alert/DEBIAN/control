@@ -1,0 +1,11 @@
+Package: rpi-temp-alert
+Version: 1.0.0-1
+Section: monitoring
+Priority: optional
+Architecture: all
+Maintainer: Nikhil M B <nikhilmb002@gmail.com>
+Depends: mailutils, bsdutils
+Description: Raspberry Pi CPU temperature monitor for Ubuntu Server.
+ Monitors CPU temperature and notifies logged-in users when it exceeds 61°C.
+ Includes wall messages, email alerts, and systemd service support.
+

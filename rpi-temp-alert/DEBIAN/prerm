@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+echo "[INFO] Removing rpi-temp-alert..."
+systemctl stop rpi-temp-alert.service
+systemctl disable rpi-temp-alert.service
+rm -f /var/log/rpi-temp-alert.log
+

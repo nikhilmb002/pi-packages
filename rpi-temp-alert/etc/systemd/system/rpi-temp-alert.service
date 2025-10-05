@@ -1,0 +1,12 @@
+[Unit]
+Description=Raspberry Pi CPU Temperature Monitor
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/rpi-temp-monitor.sh
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+

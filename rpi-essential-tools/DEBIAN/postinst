@@ -1,0 +1,43 @@
+#!/bin/bash
+set -e
+
+LOG_FILE="/var/log/rpi-essential-tools.log"
+STATIC_NETPLAN="/etc/netplan/99-static-ip.yaml"
+BACKUP_NETPLAN="/etc/netplan/99-static-ip.yaml.bak"
+
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "[INFO] Installing rpi-essential-tools at $(date)"
+
+echo "[INFO] Installing CLI tools..."
+apt  update
+apt  install -y vim git htop curl wget net-tools build-essential tree unzip
+
+echo "[INFO] Installing static IP configuration..."
+
+# Backup if not already
+if [ -f "$STATIC_NETPLAN" ] && [ ! -f "$BACKUP_NETPLAN" ]; then
+    echo "[INFO] Backing up existing Netplan config"
+    cp "$STATIC_NETPLAN" "$BACKUP_NETPLAN"
+fi
+
+# Replace with new config
+cat <<EOF > "$STATIC_NETPLAN"
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: no
+      addresses: [192.168.1.100/24]
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]
+EOF
+
+echo "[INFO] Applying Netplan config..."
+netplan apply
+
+echo "[INFO] Installation complete at $(date)"
+
+

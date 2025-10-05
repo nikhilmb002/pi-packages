@@ -1,0 +1,43 @@
+#!/bin/bash
+set -e
+
+CONFIG_FILE="/boot/firmware/config.txt"
+BACKUP_FILE="/boot/firmware/config.txt.rpi-hdmi-fix.bak"
+LOG_FILE="/var/log/rpi-hdmi-fix.log"
+
+# Logging setup
+touch "$LOG_FILE"
+chmod 644 "$LOG_FILE"
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "[INFO] Installing rpi-hdmi-fix at $(date)"
+
+# Backup the original config if not already backed up
+if [ ! -f "$BACKUP_FILE" ]; then
+    echo "[INFO] Backing up original config.txt to $BACKUP_FILE"
+    cp "$CONFIG_FILE" "$BACKUP_FILE"
+else
+    echo "[INFO] Backup already exists, skipping"
+fi
+
+# HDMI settings to apply
+HDMI_SETTINGS=(
+    "hdmi_force_hotplug=1"
+    "hdmi_drive=2"
+    "config_hdmi_boosts=7"
+    "hdmi_group=1"
+    "hdmi_mode=16"
+)
+
+echo "[INFO] Adding HDMI settings..."
+for setting in "${HDMI_SETTINGS[@]}"; do
+    if ! grep -qxF "$setting" "$CONFIG_FILE"; then
+        echo "$setting" >> "$CONFIG_FILE"
+        echo "[ADDED] $setting"
+    else
+        echo "[SKIP] $setting already present"
+    fi
+done
+
+echo "[INFO] rpi-hdmi-fix installation completed at $(date)"
+

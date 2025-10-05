@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+CONFIG_FILE="/boot/firmware/config.txt"
+BACKUP_FILE="/boot/firmware/config.txt.rpi-hdmi-fix.bak"
+LOG_FILE="/var/log/rpi-hdmi-fix.log"
+
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "[INFO] Removing rpi-hdmi-fix at $(date)"
+
+# Restore original config.txt
+if [ -f "$BACKUP_FILE" ]; then
+    echo "[INFO] Restoring original config.txt from backup"
+    cp "$BACKUP_FILE" "$CONFIG_FILE"
+    rm "$BACKUP_FILE"
+else
+    echo "[WARNING] No backup file found. Cannot restore original config."
+fi
+
+echo "[INFO] Removal complete at $(date)"
+

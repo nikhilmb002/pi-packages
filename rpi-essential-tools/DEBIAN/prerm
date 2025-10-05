@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+LOG_FILE="/var/log/rpi-essential-tools.log"
+STATIC_NETPLAN="/etc/netplan/99-static-ip.yaml"
+BACKUP_NETPLAN="/etc/netplan/99-static-ip.yaml.bak"
+
+exec > >(tee -a "$LOG_FILE") 2>&1
+
+echo "[INFO] Removing rpi-essential-tools at $(date)"
+
+if [ -f "$BACKUP_NETPLAN" ]; then
+    echo "[INFO] Restoring original Netplan config"
+    mv "$BACKUP_NETPLAN" "$STATIC_NETPLAN"
+    netplan apply
+else
+    echo "[WARNING] No Netplan backup found; leaving static config in place."
+fi
+
+echo "[INFO] Removal complete at $(date)"
+

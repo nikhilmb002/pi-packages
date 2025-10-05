@@ -1,0 +1,10 @@
+Package: rpi-hdmi-fix
+Version: 1.0.0-000
+Section: misc
+Priority: optional
+Architecture: all
+Maintainer: Nikhil M B <nikhilmb002@gmail.com>
+Description: Fix HDMI output issues on Raspberry Pi (Ubuntu).
+ This package applies configuration changes to ensure HDMI output works
+ properly on Raspberry Pi 3 running Ubuntu.
+

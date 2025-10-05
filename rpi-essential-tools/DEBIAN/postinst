@@ -10,8 +10,6 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 echo "[INFO] Installing rpi-essential-tools at $(date)"
 
 echo "[INFO] Installing CLI tools..."
-apt  update
-apt  install -y vim git htop curl wget net-tools build-essential tree unzip
 
 echo "[INFO] Installing static IP configuration..."
 
